@@ -4,117 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARKET BRAIN | AI Stock Market Intelligence</title>
-    <!-- Premium Fonts and Dashboard Core Styles Framework Layer -->
-    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 45%), #05070d; color: #f8fafc; min-h-screen: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        /* Base Configuration - No External Dependency Mode */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #060913; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
         
-        /* Layout Structure Configs */
-        .app-container { display: flex; width: 100%; min-height: 100vh; }
-        .sidebar { width: 280px; background-color: rgba(2, 6, 23, 0.9); border-right: 1px solid #1e293b; padding: 24px; position: sticky; top: 0; height: 100vh; flex-shrink: 0; backdrop-filter: blur(10px); }
-        .main-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 32px; }
-        
-        /* Branding & Navigation */
-        .brand { display: flex; items-center: center; gap: 12px; margin-bottom: 32px; }
-        .brand-icon { background-color: #10b981; color: #000; padding: 10px; rounded-radius: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
-        .brand-text h1 { font-size: 18px; font-weight: 900; tracking-spacing: -0.05em; color: #fff; }
-        .brand-text p { font-size: 11px; text-transform: uppercase; tracking-spacing: 0.2em; color: #64748b; margin-top: 2px; }
-        .nav-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
-        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #94a3b8; transition: all 0.2s; }
-        .nav-item a.active { color: #34d399; background-color: #0f172a; border: 1px solid #1e293b; font-weight: 700; }
-        .nav-item a:hover:not(.active) { color: #fff; background-color: rgba(15, 23, 42, 0.4); }
+        /* Layout Framework Panels */
+        .app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background-color: #0b1120; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 100; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand-icon { background: #10b981; color: #000; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 900; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .brand-name { font-size: 16px; font-weight: 900; letter-spacing: -0.5px; }
+        .status-pill { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #10b981; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
 
-        /* Panels & Hero Interface */
-        .hero-panel { background-color: #020617; border: 1px solid #1e293b; border-radius: 24px; padding: 40px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: center; position: relative; z-index: 2; }
-        .badge { display: inline-flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 100px; margin-bottom: 20px; }
-        .hero-panel h2 { font-size: 42px; font-weight: 900; line-height: 1.15; color: #fff; tracking-spacing: -0.03em; }
-        .hero-panel p.desc { color: #94a3b8; font-size: 15px; margin-top: 16px; line-height: 1.6; max-width: 600px; }
-        .btn-group { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-        .btn-primary { background-color: #10b981; color: #05070d; font-weight: 700; font-size: 13px; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; text-decoration: none; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1); transition: opacity 0.2s; }
-        .btn-secondary { background-color: rgba(15, 23, 42, 0.5); border: 1px solid #334155; color: #e2e8f0; font-weight: 700; font-size: 13px; padding: 12px 24px; border-radius: 12px; cursor: pointer; text-decoration: none; transition: background-color 0.2s; }
-        .btn-primary:hover { opacity: 0.9; } .btn-secondary:hover { background-color: rgba(15, 23, 42, 0.8); }
+        /* Navigation Frames Content Mapping */
+        .content-section { display: none; padding: 16px; }
+        .content-section.active-page { display: block; }
 
-        /* Metric Trackers Components */
-        .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-        .metric-card { background-color: #020617; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .metric-card p.label { font-size: 11px; text-transform: uppercase; tracking-spacing: 0.15em; color: #64748b; font-weight: 600; }
-        .metric-data { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
-        .metric-value { font-size: 22px; font-weight: 900; color: #fff; tracking-spacing: -0.02em; }
-        .change-badge { font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
-        .change-badge.up { background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; }
-        .change-badge.down { background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; }
-        .change-badge.neutral { background-color: #0f172a; border: 1px solid #1e293b; color: #94a3b8; }
+        /* Premium Buttons Core Styling */
+        .action-btn { background: #10b981; color: #000; font-weight: 700; font-size: 14px; padding: 14px 20px; border-radius: 12px; border: none; cursor: pointer; display: block; width: 100%; text-align: center; text-decoration: none; margin-top: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        .action-btn.btn-sec { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; box-shadow: none; }
 
-        /* Secondary Grid Section */
-        .desks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-        .panel-box { background-color: #020617; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-        .panel-header { border-bottom: 1px solid #1e293b; padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .panel-header h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; tracking-spacing: 0.05em; color: #cbd5e1; display: flex; align-items: center; gap: 8px; }
-        .panel-header span.route { font-size: 10px; font-family: monospace; color: #64748b; }
+        /* Structural Cards Matrices */
+        .card-panel { background: #0b1120; border: 1px solid #1e293b; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+        .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #1e293b; }
 
-        /* Tables Data Matrix Formatting */
-        .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; min-width: 400px; }
-        th { color: #64748b; text-transform: uppercase; font-size: 11px; tracking-spacing: 0.05em; font-weight: 600; padding-bottom: 10px; border-b: 1px solid rgba(30, 41, 59, 0.6); }
-        td { padding: 12px 0; border-bottom: 1px solid rgba(30, 41, 59, 0.4); }
-        tr:last-child td { border-bottom: none; }
+        /* Grid Framework Layouts */
+        .index-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+        .index-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 14px; padding: 12px; }
+        .index-card p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        .index-card h3 { font-size: 16px; font-weight: 900; margin: 4px 0; color: #fff; }
+        .status-up { color: #10b981; font-size: 11px; font-weight: 700; }
 
-        /* Broker Items formatting */
-        .broker-list { display: flex; flex-direction: column; gap: 10px; }
-        .broker-item { padding: 12px; background-color: rgba(15, 23, 42, 0.5); border: 1px solid #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .broker-info { display: flex; align-items: center; gap: 12px; }
-        .broker-avatar { width: 36px; height: 36px; background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #94a3b8; }
-        .broker-meta p { font-size: 12px; font-weight: 700; color: #e2e8f0; }
-        .broker-meta span { font-size: 10px; color: #64748b; }
-        .status-pill { font-size: 10px; font-weight: 700; color: #34d399; background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 6px; }
+        /* Table Components Rendering */
+        .table-wrapper { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; min-width: 280px; }
+        th { color: #64748b; text-transform: uppercase; font-size: 10px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+        td { padding: 10px 4px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); color: #cbd5e1; }
 
-        /* Mobile Header */
-        .mobile-header { display: none; background-color: rgba(2, 6, 23, 0.9); border-bottom: 1px solid #1e293b; padding: 14px 20px; position: sticky; top: 0; z-index: 40; backdrop-filter: blur(10px); justify-content: space-between; align-items: center; border-radius: 16px; margin-bottom: 8px; }
-
-        /* Responsive Breakpoints Rules Override */
-        @media (max-width: 1200px) {
-            .app-container { flex-direction: column; }
-            .sidebar { display: none; }
-            .mobile-header { display: flex; }
-            .main-content { padding: 16px; gap: 20px; }
-            .hero-grid { grid-template-columns: 1fr; gap: 24px; }
-            .hero-panel { padding: 24px; border-radius: 20px; }
-            .hero-panel h2 { font-size: 28px; }
-        }
+        /* Application Footer Systems */
+        .broker-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #131b2e; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 8px; }
+        .broker-name { font-size: 12px; font-weight: 700; color: #fff; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: #0b1120; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+        .nav-btn { background: none; border: none; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: bold; width: 25%; }
+        .nav-btn.active-btn { color: #10b981; }
     </style>
 </head>
 <body>
 
-    <!-- MOBILE NAVIGATION OVERLAY INTERFACE -->
-    <div class="mobile-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%;"></div>
-            <span style="font-weight: 900; color: #fff; letter-spacing: -0.02em;">MARKET BRAIN</span>
+    <!-- APPLICATION HEADER CONTROL PANEL -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon">MB</div>
+            <div class="brand-name">MARKET BRAIN</div>
         </div>
-        <span class="status-pill" style="font-size: 9px; text-transform: uppercase;">V2 Active</span>
+        <span class="status-pill">V2 ACTIVE</span>
+    </header>
+
+    <!-- CORE WORKSPACE FRAMES SECTION VIEWPORTS -->
+    <!-- VIEWPORT 1: HOME PAGE COMMAND CENTER -->
+    <div id="page-home" class="content-section active-page">
+        <div class="card-panel">
+            <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 8px;">AI Institutional Intelligence</h2>
+            <p style="font-size: 12px; color: #94a3b8; line-height: 1.4;">Production deployment operational. Monitoring core index parameters, volumetric metrics, and options sentiment flow models maps.</p>
+            <button class="action-btn" onclick="switchTab('broker')">Launch Ingestion Pipelines</button>
+            <button class="action-btn btn-sec" onclick="switchTab('fiidii')">View Institutional Flows</button>
+        </div>
+
+        <div class="card-title">Live Watch Indices</div>
+        <div class="index-grid">
+            <div class="index-card">
+                <p>Nifty 50</p>
+                <h3>₹23,450.75</h3>
+                <span class="status-up">+0.85%</span>
+            </div>
+            <div class="index-card">
+                <p>Bank Nifty</p>
+                <h3>₹50,210.30</h3>
+                <span class="status-up">+1.12%</span>
+            </div>
+        </div>
     </div>
 
-    <div class="app-container">
-        
-        <!-- SIDEBAR NAVIGATION SCOPE -->
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-icon"><i class="fa-solid fa-microchip"></i></div>
-                <div class="brand-text">
-                    <h1>MARKET BRAIN</h1>
-                    <p>marketbrain.co.in</p>
-                </div>
+    <!-- VIEWPORT 2: DATA TELEMETRY TRADERS STREAM -->
+    <div id="page-signals" class="content-section">
+        <div class="card-panel">
+            <div class="card-title">Top Signals Engine Logs</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Action</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:700;">RELIANCE</td>
+                            <td style="color:#10b981; font-weight:700;">BUY</td>
+                            <td>89%</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">TCS</td>
+                            <td style="color:#f59e0b; font-weight:700;">HOLD</td>
+                            <td>65%</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="#" class="active"><i class="fa-solid fa-chart-line" style="width: 18px;"></i> Command Center</a></li>
-                <li class="nav-item"><a href="#"><i class="fa-solid fa-magnifying-glass-chart" style="width: 18px;"></i> Stock Analysis</a></li>
-                <li class="nav-item"><a href="#"><i class="fa-solid fa-building-columns" style="width: 18px;"></i> FII / DII Desk</a></li>
-                <li class="nav-item"><a href="#"><i class="fa-solid fa-newspaper" style="width: 18px;"></i> News Sentiment</a></li>
-                <li class="nav-item"><a href="#"><i class="fa-solid fa-wave-square" style="width: 18px;"></i> Derivatives Desk</a></li>
-                <li class="nav-item"><a href="#"><i class="fa-solid fa-plug" style="width: 18px;"></i> Broker Connect</a></li>
-            </ul>
-        </aside>
+        </div>
+    </div>
 
-        <!-- DASHBOARD CONTAINER PANEL -->
+    <!-- VIEWPORT 3: INSTITUTIONAL CASH FLOW LAYER -->
+    <div id="page-fiidii" class="content-section">
+        <div class="card-panel">
+            <div class="card-title">FII / DII Institutional Flows</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Gross Buy</th>
+                            <th>Gross Sell</th>
+                            <th>Net Flow</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:700;">FII Data Feed</td>
+                            <td>₹8,432 Cr</td>
+                            <td>₹6,120 Cr</td>
+                            <td style="color:#10b981; font-weight:700;">+₹2,312 Cr</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">DII Data Feed</td>
+                            <td>₹5,110 Cr</td>
+                            <td>₹4,230 Cr</td>
+                            <td style="color:#10b981; font-weight:700;">+₹880 Cr</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEWPORT 4: BROKER API CONNECTIONS CONTROL MAP -->
+    <div id="page-broker" class="content-section">
+        <div class="card-panel">
+            <div class="card-title">API Execution Broker Gateway</div>
+            <div class="broker-row">
+                <span class="broker-name">Angel One SmartAPI</span>
+                <span class="status-pill">Active</span>
+            </div>
+            <div class="broker-row">
+                <span class="broker-name">Zerodha Kite Connect</span>
+                <span class="status-pill">Active</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION STICKY TAB BOTTOM CONTROLLER MAP -->
+    <nav class="bottom-nav">
+        <button id="btn-home" class="nav-btn active-btn" onclick="switchTab('home')">Home</button>
+        <button id="btn-signals" class="nav-btn" onclick="switchTab('signals')">Signals</button>
+        <button id="btn-fiidii" class="nav-btn" onclick="switchTab('fiidii')">FII/DII</button>
+        <button id="btn-broker" class="nav-btn" onclick="switchTab('broker')">Connect</button>
+    </nav>
+
+    <!-- CORE WORKSPACE FRAME ENVIRONMENT DEPLOYMENT SYSTEM CONTROLLER -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active-page');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-btn');
+            });
+            
+            const selectedPage = document.getElementById('page-' + tabId);
+            const selectedBtn = document.getElementById('btn-' + tabId);
+            
+            if(selectedPage) selectedPage.classList.add('active-page');
+        
