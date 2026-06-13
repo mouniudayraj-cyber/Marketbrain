@@ -4,127 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARKET BRAIN | AI Stock Market Intelligence</title>
-    <!-- Tailwind CSS Core Engine V4 -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Vector Icons Library -->
+    <!-- Premium Fonts and Dashboard Core Styles Framework Layer -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
-        .terminal-grid { background-size: 30px 30px; background-image: linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px); }
-        body { background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 45%), #05070d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 45%), #05070d; color: #f8fafc; min-h-screen: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        
+        /* Layout Structure Configs */
+        .app-container { display: flex; width: 100%; min-height: 100vh; }
+        .sidebar { width: 280px; background-color: rgba(2, 6, 23, 0.9); border-right: 1px solid #1e293b; padding: 24px; position: sticky; top: 0; height: 100vh; flex-shrink: 0; backdrop-filter: blur(10px); }
+        .main-content { flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 32px; }
+        
+        /* Branding & Navigation */
+        .brand { display: flex; items-center: center; gap: 12px; margin-bottom: 32px; }
+        .brand-icon { background-color: #10b981; color: #000; padding: 10px; rounded-radius: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+        .brand-text h1 { font-size: 18px; font-weight: 900; tracking-spacing: -0.05em; color: #fff; }
+        .brand-text p { font-size: 11px; text-transform: uppercase; tracking-spacing: 0.2em; color: #64748b; margin-top: 2px; }
+        .nav-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #94a3b8; transition: all 0.2s; }
+        .nav-item a.active { color: #34d399; background-color: #0f172a; border: 1px solid #1e293b; font-weight: 700; }
+        .nav-item a:hover:not(.active) { color: #fff; background-color: rgba(15, 23, 42, 0.4); }
+
+        /* Panels & Hero Interface */
+        .hero-panel { background-color: #020617; border: 1px solid #1e293b; border-radius: 24px; padding: 40px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: center; position: relative; z-index: 2; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 100px; margin-bottom: 20px; }
+        .hero-panel h2 { font-size: 42px; font-weight: 900; line-height: 1.15; color: #fff; tracking-spacing: -0.03em; }
+        .hero-panel p.desc { color: #94a3b8; font-size: 15px; margin-top: 16px; line-height: 1.6; max-width: 600px; }
+        .btn-group { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+        .btn-primary { background-color: #10b981; color: #05070d; font-weight: 700; font-size: 13px; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; text-decoration: none; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1); transition: opacity 0.2s; }
+        .btn-secondary { background-color: rgba(15, 23, 42, 0.5); border: 1px solid #334155; color: #e2e8f0; font-weight: 700; font-size: 13px; padding: 12px 24px; border-radius: 12px; cursor: pointer; text-decoration: none; transition: background-color 0.2s; }
+        .btn-primary:hover { opacity: 0.9; } .btn-secondary:hover { background-color: rgba(15, 23, 42, 0.8); }
+
+        /* Metric Trackers Components */
+        .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .metric-card { background-color: #020617; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .metric-card p.label { font-size: 11px; text-transform: uppercase; tracking-spacing: 0.15em; color: #64748b; font-weight: 600; }
+        .metric-data { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+        .metric-value { font-size: 22px; font-weight: 900; color: #fff; tracking-spacing: -0.02em; }
+        .change-badge { font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+        .change-badge.up { background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; }
+        .change-badge.down { background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; }
+        .change-badge.neutral { background-color: #0f172a; border: 1px solid #1e293b; color: #94a3b8; }
+
+        /* Secondary Grid Section */
+        .desks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .panel-box { background-color: #020617; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        .panel-header { border-bottom: 1px solid #1e293b; padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .panel-header h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; tracking-spacing: 0.05em; color: #cbd5e1; display: flex; align-items: center; gap: 8px; }
+        .panel-header span.route { font-size: 10px; font-family: monospace; color: #64748b; }
+
+        /* Tables Data Matrix Formatting */
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; min-width: 400px; }
+        th { color: #64748b; text-transform: uppercase; font-size: 11px; tracking-spacing: 0.05em; font-weight: 600; padding-bottom: 10px; border-b: 1px solid rgba(30, 41, 59, 0.6); }
+        td { padding: 12px 0; border-bottom: 1px solid rgba(30, 41, 59, 0.4); }
+        tr:last-child td { border-bottom: none; }
+
+        /* Broker Items formatting */
+        .broker-list { display: flex; flex-direction: column; gap: 10px; }
+        .broker-item { padding: 12px; background-color: rgba(15, 23, 42, 0.5); border: 1px solid #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .broker-info { display: flex; align-items: center; gap: 12px; }
+        .broker-avatar { width: 36px; height: 36px; background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #94a3b8; }
+        .broker-meta p { font-size: 12px; font-weight: 700; color: #e2e8f0; }
+        .broker-meta span { font-size: 10px; color: #64748b; }
+        .status-pill { font-size: 10px; font-weight: 700; color: #34d399; background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 6px; }
+
+        /* Mobile Header */
+        .mobile-header { display: none; background-color: rgba(2, 6, 23, 0.9); border-bottom: 1px solid #1e293b; padding: 14px 20px; position: sticky; top: 0; z-index: 40; backdrop-filter: blur(10px); justify-content: space-between; align-items: center; border-radius: 16px; margin-bottom: 8px; }
+
+        /* Responsive Breakpoints Rules Override */
+        @media (max-width: 1200px) {
+            .app-container { flex-direction: column; }
+            .sidebar { display: none; }
+            .mobile-header { display: flex; }
+            .main-content { padding: 16px; gap: 20px; }
+            .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+            .hero-panel { padding: 24px; border-radius: 20px; }
+            .hero-panel h2 { font-size: 28px; }
+        }
     </style>
 </head>
-<body class="text-[#f8fafc] font-sans antialiased min-h-screen xl:flex selection:bg-emerald-500/30">
+<body>
 
-    <!-- 1. LEFT DASHBOARD RADAR NAVIGATION LAYOUT PANELS -->
-    <aside class="sticky top-0 z-40 hidden h-screen w-72 border-r border-slate-800/80 bg-slate-950/90 p-6 backdrop-blur xl:block flex-shrink-0">
-        <div class="mb-8 flex items-center gap-3">
-            <div class="rounded-2xl bg-emerald-500 p-2.5 text-black shadow-lg shadow-emerald-500/20">
-                <i class="fa-solid fa-microchip text-xl"></i>
-            </div>
-            <div>
-                <p class="text-lg font-black tracking-tight text-white">MARKET BRAIN</p>
-                <p class="text-xs uppercase tracking-[.25em] text-slate-500">marketbrain.co.in</p>
-            </div>
+    <!-- MOBILE NAVIGATION OVERLAY INTERFACE -->
+    <div class="mobile-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%;"></div>
+            <span style="font-weight: 900; color: #fff; letter-spacing: -0.02em;">MARKET BRAIN</span>
         </div>
-        <nav class="space-y-1.5">
-            <a href="#dashboard" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-emerald-400 bg-slate-900/80 border border-slate-800">
-                <i class="fa-solid fa-chart-line w-5"></i> Command Center
-            </a>
-            <a href="#analysis" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-900/40 hover:text-white transition">
-                <i class="fa-solid fa-magnifying-glass-chart w-5"></i> Stock Analysis
-            </a>
-            <a href="#fiidii" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-900/40 hover:text-white transition">
-                <i class="fa-solid fa-building-columns w-5"></i> FII / DII Desk
-            </a>
-            <a href="#sentiment" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-900/40 hover:text-white transition">
-                <i class="fa-solid fa-newspaper w-5"></i> News Sentiment
-            </a>
-            <a href="#options" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-900/40 hover:text-white transition">
-                <i class="fa-solid fa-wave-square w-5"></i> Derivatives Desk
-            </a>
-            <a href="#broker" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-900/40 hover:text-white transition">
-                <i class="fa-solid fa-plug w-5"></i> Broker Connect
-            </a>
-        </nav>
-    </aside>
+        <span class="status-pill" style="font-size: 9px; text-transform: uppercase;">V2 Active</span>
+    </div>
 
-    <!-- 2. MAIN COMMAND CENTER COMPONENT EXECUTION CONTAINER -->
-    <main id="dashboard" class="min-w-0 flex-1 p-4 md:p-8 space-y-8 overflow-y-auto">
+    <div class="app-container">
         
-        <!-- MOBILE RESPONSIVE ADAPTIVE HEADER BLOCK -->
-        <div class="sticky top-0 z-40 flex items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 py-3.5 backdrop-blur xl:hidden rounded-2xl mb-2">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="font-black text-white tracking-tight">MARKET BRAIN</span>
+        <!-- SIDEBAR NAVIGATION SCOPE -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-microchip"></i></div>
+                <div class="brand-text">
+                    <h1>MARKET BRAIN</h1>
+                    <p>marketbrain.co.in</p>
+                </div>
             </div>
-            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-black uppercase text-emerald-400">V2 Active</span>
-        </div>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#" class="active"><i class="fa-solid fa-chart-line" style="width: 18px;"></i> Command Center</a></li>
+                <li class="nav-item"><a href="#"><i class="fa-solid fa-magnifying-glass-chart" style="width: 18px;"></i> Stock Analysis</a></li>
+                <li class="nav-item"><a href="#"><i class="fa-solid fa-building-columns" style="width: 18px;"></i> FII / DII Desk</a></li>
+                <li class="nav-item"><a href="#"><i class="fa-solid fa-newspaper" style="width: 18px;"></i> News Sentiment</a></li>
+                <li class="nav-item"><a href="#"><i class="fa-solid fa-wave-square" style="width: 18px;"></i> Derivatives Desk</a></li>
+                <li class="nav-item"><a href="#"><i class="fa-solid fa-plug" style="width: 18px;"></i> Broker Connect</a></li>
+            </ul>
+        </aside>
 
-        <!-- HERO BRANDING COMMAND INTERFACE -->
-        <section class="relative overflow-hidden rounded-[2rem] border border-slate-800/90 bg-slate-950 p-6 shadow-2xl md:p-10">
-            <div class="absolute inset-0 terminal-grid opacity-20 pointer-events-none"></div>
-            <div class="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
-                <div>
-                    <span class="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 mb-4">
-                        <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Production Architecture Configured
-                    </span>
-                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white leading-[1.15]">
-                        AI-Powered Institutional Stock Market Intelligence
-                    </h2>
-                    <p class="mt-4 text-sm md:text-base text-slate-400 max-w-2xl leading-relaxed">
-                        Production-oriented analytics platform for Indian traders. Integrated with Angel One SmartAPI, Zerodha Kite Connect, Fyers API systems, and structured PostgreSQL telemetry pipelines.
-                    </p>
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="#broker" class="rounded-xl bg-emerald-500 px-5 py-3 text-xs font-bold text-black shadow-lg shadow-emerald-500/10 hover:brightness-110 transition">Launch Ingestion Pipelines</a>
-                        <a href="#fiidii" class="rounded-xl border border-slate-800 px-5 py-3 text-xs font-bold text-slate-300 bg-slate-900/30 hover:bg-slate-900/60 transition">View Institutional Flows</a>
-                    </div>
-                </div>
-                
-                <!-- DYNAMIC ANALYTICS SIDE PANEL CAPTURING PROJECT SCOPE -->
-                <div class="rounded-2xl border border-slate-800/90 bg-slate-900/30 p-5 backdrop-blur-sm shadow-xl">
-                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-4">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-brain text-emerald-400 mr-1.5"></i> AI Market Outlook</h4>
-                        <span class="border border-amber-500/30 bg-amber-500/10 text-amber-400 text-[10px] px-2 py-0.5 rounded-md font-bold uppercase">Real-Time</span>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="p-3.5 rounded-xl border border-slate-800/60 bg-[#05070d]/60 flex items-center justify-between">
-                            <span class="text-xs text-slate-400">Composite Signals Engine</span>
-                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Operational</span>
-                        </div>
-                        <div class="p-3.5 rounded-xl border border-slate-800/60 bg-[#05070d]/60 flex items-center justify-between">
-                            <span class="text-xs text-slate-400">Gemini Ingestion Modules</span>
-                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Model Ready</span>
-                        </div>
-                        <p class="text-[11px] text-slate-500 leading-normal pt-1 text-center">
-                            Environment parameters validated. Application tracking index values over WebSocket streams.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LIVE INDEX METRIC TRACKERS COMPONENT ROW -->
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div class="rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-lg relative overflow-hidden">
-                <p class="text-xs uppercase tracking-[.2em] text-slate-500 font-medium">NIFTY 50 INDEX</p>
-                <div class="mt-3 flex items-end justify-between">
-                    <p class="text-xl md:text-2xl font-black text-white tracking-tight">₹23,450.75</p>
-                    <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20"><i class="fa-solid fa-caret-up mr-0.5"></i> 0.85%</span>
-                </div>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-lg relative overflow-hidden">
-                <p class="text-xs uppercase tracking-[.2em] text-slate-500 font-medium">BANKNIFTY INDEX</p>
-                <div class="mt-3 flex items-end justify-between">
-                    <p class="text-xl md:text-2xl font-black text-white tracking-tight">₹50,210.30</p>
-                    <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20"><i class="fa-solid fa-caret-up mr-0.5"></i> 1.12%</span>
-                </div>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-lg relative overflow-hidden">
-                <p class="text-xs uppercase tracking-[.2em] text-slate-500 font-medium">INDIA VIX RISK FLOW</p>
-                <div class="mt-3 flex items-end justify-between">
-                    <p class="text-xl md:text-2xl font-black text-white tracking-tight">12.45</p>
-                    <span class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20"><i class="fa-solid fa-caret-down mr-0.5"></i> 3.40%</span>
-                </div>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-lg relative overflow-hidden">
-                <p class="text-xs uppercase tracking-[.2em] text-slate-500 font-medium">COMPOSITE SENTIMENT</p>
+        <!-- DASHBOARD CONTAINER PANEL -->
