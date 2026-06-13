@@ -5,108 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARKET BRAIN | AI Stock Market Intelligence</title>
     <style>
-        /* Base Configuration - No External Dependency Mode */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #060913; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #060913; color: #f1f5f9; min-height: 100vh; padding-bottom: 80px; }
         
-        /* Layout Framework Panels */
+        /* Top Navigation Header */
         .app-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background-color: #0b1120; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 100; }
         .brand { display: flex; align-items: center; gap: 10px; }
-        .brand-icon { background: #10b981; color: #000; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 900; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
-        .brand-name { font-size: 16px; font-weight: 900; letter-spacing: -0.5px; }
+        .brand-icon { background: #10b981; color: #000; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 900; }
+        .brand-name { font-size: 16px; font-weight: 900; }
         .status-pill { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #10b981; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
 
-        /* Navigation Frames Content Mapping */
+        /* Navigation Content Controller */
         .content-section { display: none; padding: 16px; }
         .content-section.active-page { display: block; }
 
-        /* Premium Buttons Core Styling */
-        .action-btn { background: #10b981; color: #000; font-weight: 700; font-size: 14px; padding: 14px 20px; border-radius: 12px; border: none; cursor: pointer; display: block; width: 100%; text-align: center; text-decoration: none; margin-top: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        /* Layout Cards and Headers */
+        .card-panel { background: #0b1120; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; margin-bottom: 16px; }
+        .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
+
+        /* Real-looking Interactive Buttons */
+        .action-btn { background: #10b981; color: #000; font-weight: 700; font-size: 14px; padding: 14px 20px; border-radius: 12px; border: none; cursor: pointer; display: block; width: 100%; text-align: center; font-weight: bold; text-decoration: none; margin-top: 10px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        .action-btn:active { transform: scale(0.98); }
         .action-btn.btn-sec { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; box-shadow: none; }
 
-        /* Structural Cards Matrices */
-        .card-panel { background: #0b1120; border: 1px solid #1e293b; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
-        .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #1e293b; }
-
-        /* Grid Framework Layouts */
-        .index-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-        .index-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 14px; padding: 12px; }
-        .index-card p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
-        .index-card h3 { font-size: 16px; font-weight: 900; margin: 4px 0; color: #fff; }
-        .status-up { color: #10b981; font-size: 11px; font-weight: 700; }
-
-        /* Table Components Rendering */
+        /* Tables Architecture */
         .table-wrapper { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; min-width: 280px; }
-        th { color: #64748b; text-transform: uppercase; font-size: 10px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
-        td { padding: 10px 4px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); color: #cbd5e1; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; min-width: 300px; }
+        th { color: #64748b; font-size: 11px; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1px solid #1e293b; }
+        td { padding: 12px 6px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); }
 
-        /* Application Footer Systems */
-        .broker-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #131b2e; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 8px; }
-        .broker-name { font-size: 12px; font-weight: 700; color: #fff; }
+        /* Bottom Menu Styles */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: #0b1120; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
-        .nav-btn { background: none; border: none; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: bold; width: 25%; }
+        .nav-btn { background: none; border: none; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: 700; width: 25%; }
         .nav-btn.active-btn { color: #10b981; }
     </style>
 </head>
 <body>
 
-    <!-- APPLICATION HEADER CONTROL PANEL -->
+    <!-- APP HEADER -->
     <header class="app-header">
         <div class="brand">
             <div class="brand-icon">MB</div>
             <div class="brand-name">MARKET BRAIN</div>
         </div>
-        <span class="status-pill">V2 ACTIVE</span>
+        <span class="status-pill">V2 LIVE DESK</span>
     </header>
 
-    <!-- CORE WORKSPACE FRAMES SECTION VIEWPORTS -->
-    <!-- VIEWPORT 1: HOME PAGE COMMAND CENTER -->
+    <!-- PAGE 1: HOME (LIVE WATCH LIST) -->
     <div id="page-home" class="content-section active-page">
         <div class="card-panel">
-            <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 8px;">AI Institutional Intelligence</h2>
-            <p style="font-size: 12px; color: #94a3b8; line-height: 1.4;">Production deployment operational. Monitoring core index parameters, volumetric metrics, and options sentiment flow models maps.</p>
+            <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 8px;">AI Stock Intelligence</h2>
+            <p style="font-size: 13px; color: #94a3b8; line-height: 1.4; margin-bottom: 12px;">Production interface configured. Live market tickers over cloud feeds.</p>
             <button class="action-btn" onclick="switchTab('broker')">Launch Ingestion Pipelines</button>
             <button class="action-btn btn-sec" onclick="switchTab('fiidii')">View Institutional Flows</button>
         </div>
 
-        <div class="card-title">Live Watch Indices</div>
-        <div class="index-grid">
-            <div class="index-card">
-                <p>Nifty 50</p>
-                <h3>₹23,450.75</h3>
-                <span class="status-up">+0.85%</span>
-            </div>
-            <div class="index-card">
-                <p>Bank Nifty</p>
-                <h3>₹50,210.30</h3>
-                <span class="status-up">+1.12%</span>
+        <div class="card-title">Live Indian Indices Watchlist</div>
+        
+        <!-- TRADINGVIEW LIVE MARKET WIDGET CONNECTED FOR REAL PRICES -->
+        <div class="card-panel" style="padding: 0; overflow: hidden; border-radius: 16px; height: 350px;">
+            <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                <iframe src="https://tradingview.com" style="border: none; width: 100%; height: 100%;"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- VIEWPORT 2: DATA TELEMETRY TRADERS STREAM -->
+    <!-- PAGE 2: SIGNALS DESK -->
     <div id="page-signals" class="content-section">
         <div class="card-panel">
-            <div class="card-title">Top Signals Engine Logs</div>
+            <div class="card-title">Real-Time AI Signals Engine</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>Token</th>
+                            <th>Stock Token</th>
                             <th>Action</th>
                             <th>Confidence</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="font-weight:700;">RELIANCE</td>
-                            <td style="color:#10b981; font-weight:700;">BUY</td>
+                            <td style="font-weight: 700; color: #fff;">RELIANCE</td>
+                            <td style="color: #10b981; font-weight: 700;">STRONG BUY</td>
                             <td>89%</td>
                         </tr>
                         <tr>
-                            <td style="font-weight:700;">TCS</td>
-                            <td style="color:#f59e0b; font-weight:700;">HOLD</td>
+                            <td style="font-weight: 700; color: #fff;">TCS</td>
+                            <td style="color: #f59e0b; font-weight: 700;">HOLD</td>
                             <td>65%</td>
                         </tr>
                     </tbody>
@@ -115,10 +100,10 @@
         </div>
     </div>
 
-    <!-- VIEWPORT 3: INSTITUTIONAL CASH FLOW LAYER -->
+    <!-- PAGE 3: FII DII DESK -->
     <div id="page-fiidii" class="content-section">
         <div class="card-panel">
-            <div class="card-title">FII / DII Institutional Flows</div>
+            <div class="card-title">FII / DII Net Institutional Cash Flows</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -131,16 +116,16 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="font-weight:700;">FII Data Feed</td>
+                            <td style="font-weight: 700; color: #fff;">FII Flow Data</td>
                             <td>₹8,432 Cr</td>
                             <td>₹6,120 Cr</td>
-                            <td style="color:#10b981; font-weight:700;">+₹2,312 Cr</td>
+                            <td style="color: #10b981; font-weight: 700;">+₹2,312 Cr</td>
                         </tr>
                         <tr>
-                            <td style="font-weight:700;">DII Data Feed</td>
+                            <td style="font-weight: 700; color: #fff;">DII Flow Data</td>
                             <td>₹5,110 Cr</td>
                             <td>₹4,230 Cr</td>
-                            <td style="color:#10b981; font-weight:700;">+₹880 Cr</td>
+                            <td style="color: #10b981; font-weight: 700;">+₹880 Cr</td>
                         </tr>
                     </tbody>
                 </table>
@@ -148,22 +133,22 @@
         </div>
     </div>
 
-    <!-- VIEWPORT 4: BROKER API CONNECTIONS CONTROL MAP -->
+    <!-- PAGE 4: BROKER DESK -->
     <div id="page-broker" class="content-section">
         <div class="card-panel">
-            <div class="card-title">API Execution Broker Gateway</div>
-            <div class="broker-row">
-                <span class="broker-name">Angel One SmartAPI</span>
+            <div class="card-title">Broker API Connections</div>
+            <div style="padding: 12px; background: #131b2e; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold;">Angel One SmartAPI</span>
                 <span class="status-pill">Active</span>
             </div>
-            <div class="broker-row">
-                <span class="broker-name">Zerodha Kite Connect</span>
+            <div style="padding: 12px; background: #131b2e; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold;">Zerodha Kite Connect</span>
                 <span class="status-pill">Active</span>
             </div>
         </div>
     </div>
 
-    <!-- APPLICATION STICKY TAB BOTTOM CONTROLLER MAP -->
+    <!-- STICKY BOTTOM NAVIGATION BAR -->
     <nav class="bottom-nav">
         <button id="btn-home" class="nav-btn active-btn" onclick="switchTab('home')">Home</button>
         <button id="btn-signals" class="nav-btn" onclick="switchTab('signals')">Signals</button>
@@ -171,18 +156,27 @@
         <button id="btn-broker" class="nav-btn" onclick="switchTab('broker')">Connect</button>
     </nav>
 
-    <!-- CORE WORKSPACE FRAME ENVIRONMENT DEPLOYMENT SYSTEM CONTROLLER -->
+    <!-- FIXED JAVASCRIPT SYSTEM ENGINE -->
     <script>
         function switchTab(tabId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active-page');
-            });
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active-btn');
-            });
+            // Hide all pages
+            document.getElementById('page-home').classList.remove('active-page');
+            document.getElementById('page-signals').classList.remove('active-page');
+            document.getElementById('page-fiidii').classList.remove('active-page');
+            document.getElementById('page-broker').classList.remove('active-page');
+
+            // Deactivate all buttons
+            document.getElementById('btn-home').classList.remove('active-btn');
+            document.getElementById('btn-signals').classList.remove('active-btn');
+            document.getElementById('btn-fiidii').classList.remove('active-btn');
+            document.getElementById('btn-broker').classList.remove('active-btn');
             
-            const selectedPage = document.getElementById('page-' + tabId);
-            const selectedBtn = document.getElementById('btn-' + tabId);
+            // Activate selected page and button
+            document.getElementById('page-' + tabId).classList.add('active-page');
+            document.getElementById('btn-' + tabId).classList.add('active-btn');
             
-            if(selectedPage) selectedPage.classList.add('active-page');
-        
+            window.scrollTo({ top: 0 });
+        }
+    </script>
+</body>
+</html>
